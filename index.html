@@ -1,0 +1,133 @@
+html
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soap-Craft AI 智能手工皂配方機</title>
+    <!-- 引入高畫質前端網頁渲染樣式庫 -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        .progress-bar { transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- 頂部導航欄與系統宣告 -->
+        <header class="border-b border-slate-800 pb-6 mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-black text-emerald-400 tracking-tight flex items-center gap-2">
+                    🧼 Soap-Craft AI <span class="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded font-mono">v5.0-Live</span>
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">基於幾何矩陣運算的綠色化學手工皂優化製程系統</p>
+            </div>
+            <div class="text-xs text-slate-500 font-mono text-left md:text-right">
+                <div>Deployment: GitHub Pages</div>
+                <div>Status: Fully Functional Offline</div>
+            </div>
+        </header>
+
+        <!-- 主主體核心排版 -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- 左側第一欄：表單資料輸入區 (佔 5 格) -->
+            <main class="lg:col-span-5 space-y-6">
+                <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
+                    <h2 class="text-lg font-bold mb-4 text-slate-200 border-l-4 border-emerald-500 pl-2">1. 植物油脂質量配比 (Grams)</h2>
+                    <form id="oil-form" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Olive Oil 橄欖油 (溫和滋潤底質)</label>
+                            <input type="number" id="oil-olive" value="400" min="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Coconut Oil 椰子油 (硬度與泡沫洗淨力)</label>
+                            <input type="number" id="oil-coconut" value="250" min="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Palm Oil 棕櫚油 (結構硬度與耐用度)</label>
+                            <input type="number" id="oil-palm" value="250" min="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Shea Butter 乳木果油 (高級皮膚屏障修復)</label>
+                            <input type="number" id="oil-shea" value="50" min="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Castor Oil 蓖麻油 (持久綿密泡沫質感)</label>
+                            <input type="number" id="oil-castor" value="50" min="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        
+                        <div class="pt-4 border-t border-slate-800 grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">超脂折減 (Superfat)</label>
+                                <select id="param-superfat" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none">
+                                    <option value="0.05" selected>5% (黃金平衡)</option>
+                                    <option value="0.03">3% (高洗淨力)</option>
+                                    <option value="0.07">7% (極度極度滋潤)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">水相倍率 (Water Ratio)</label>
+                                <input type="number" id="param-water-ratio" value="2.0" step="0.1" min="1.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- 有機精油調配與安全安全控制區 -->
+                <section class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
+                    <h2 class="text-lg font-bold mb-4 text-slate-200 border-l-4 border-amber-500 pl-2">2. 有機精油安全安全稀釋矩陣</h2>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">精油種類 (IFRA對照)</label>
+                            <select id="eo-type" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-amber-400 font-bold text-sm focus:outline-none">
+                                <option value="Lavender" selected>Lavender 薰衣草 (限 3.0%)</option>
+                                <option value="TeaTree">Tea Tree 茶樹 (限 1.5%)</option>
+                                <option value="Peppermint">Peppermint 歐薄荷 (限 1.0%)</option>
+                                <option value="SweetOrange">Sweet Orange 甜橙 (限 2.0%)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">目標添加率 (%)</label>
+                            <input type="number" id="eo-target-rate" value="1.5" step="0.1" min="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-amber-400 font-bold focus:outline-none">
+                        </div>
+                    </div>
+                    <div id="eo-note" class="text-xs text-slate-400 bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono">
+                        載入中...
+                    </div>
+                </section>
+            </main>
+
+            <!-- 右側第二欄：即時運算輸出與特徵圖譜 (佔 7 格) -->
+            <section class="lg:col-span-7 space-y-6">
+                <!-- 化學試劑精準稱重面板 -->
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
+                    <h2 class="text-lg font-bold mb-4 text-slate-200 border-l-4 border-blue-500 pl-2">3. 精準化學試劑配料值 (配方輸出)</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">固體 氫氧化鈉 (NaOH)</span>
+                            <span id="out-naoh" class="text-3xl font-black text-amber-400 tracking-tight">0.00 <span class="text-sm font-normal text-slate-400">g</span></span>
+                        </div>
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">蒸餾水質量 (2.0x 倍率)</span>
+                            <span id="out-water" class="text-3xl font-black text-blue-400 tracking-tight">0.00 <span class="text-sm font-normal text-slate-400">g</span></span>
+                        </div>
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">選定精油淨重 (EO Mass)</span>
+                            <span id="out-eo" class="text-3xl font-black text-emerald-400 tracking-tight">0.00 <span class="text-sm font-normal text-slate-400">g</span></span>
+                            <div id="eo-safety-badge" class="mt-1 text-[10px] font-mono inline-block px-1.5 py-0.5 rounded">--</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-4 bg-red-950/20 border border-red-900/60 rounded-xl text-xs text-red-300 space-y-1">
+                        <div class="font-bold flex items-center gap-1">⚠️ 化學放熱反應安全安全操守操作守則 (Exothermic Hazard Control):</div>
+                        <p>操作鹼液時必須將 <strong>氫氧化鈉緩慢倒入水中</strong>，絕不可將水倒入強鹼固體中，以防劇烈沸騰濺出灼傷皮膚。若不慎觸及，請立即用海量流動清水沖洗。待鹼液自然冷卻至 <strong>50°C 左右</strong> 方可與植物油相混合。</p>
+                    </div>
+                </div>
+
+                <!-- 預測手工皂物理特徵分子圖譜 -->
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
+                    <h2 class="text-lg font-bold mb-4 text-slate-200 border-l-4 border-purple-500 pl-2">4. 成品分子結構與效能預測</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 
